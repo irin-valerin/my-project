@@ -1,7 +1,6 @@
-# Python
-__pycache__/
-*.py[cod]
-*.env
-*.venv
-venv/
-env/
+# Токены, API-ключи, пароли
+.env
+.env.local
+
+# SQLite, PostgreSQL дампы и т. д.
+*.db
