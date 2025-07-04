@@ -1,0 +1,278 @@
+2025-07-03 16:13:49,266 - __main__ - INFO - Бот запускается...
+2025-07-03 16:15:51,800 - TeleBot - ERROR - Infinity polling: polling exited
+2025-07-03 16:15:51,801 - TeleBot - ERROR - Break infinity polling
+2025-07-03 16:17:03,705 - __main__ - ERROR - Ошибка инициализации БД: no such column: user_id
+2025-07-03 16:18:09,591 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-03 16:18:09,592 - apscheduler.scheduler - INFO - Added job "check_and_send_capsules" to job store "default"
+2025-07-03 16:18:09,592 - apscheduler.scheduler - INFO - Scheduler started
+2025-07-03 16:18:09,592 - __main__ - INFO - Бот запускается...
+2025-07-03 16:19:57,632 - TeleBot - ERROR - Infinity polling: polling exited
+2025-07-03 16:19:57,634 - TeleBot - ERROR - Break infinity polling
+2025-07-03 16:19:57,634 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-07-03 16:19:57,634 - __main__ - INFO - Бот остановлен
+2025-07-03 16:21:28,900 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-03 16:21:28,900 - apscheduler.scheduler - INFO - Added job "check_and_send_capsules" to job store "default"
+2025-07-03 16:21:28,900 - apscheduler.scheduler - INFO - Scheduler started
+2025-07-03 16:21:28,900 - __main__ - INFO - Бот запускается...
+2025-07-03 16:21:44,788 - apscheduler.scheduler - INFO - Added job "send_capsule" to job store "default"
+2025-07-03 16:21:59,056 - TeleBot - ERROR - Infinity polling: polling exited
+2025-07-03 16:21:59,057 - TeleBot - ERROR - Break infinity polling
+2025-07-03 16:21:59,058 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-07-03 16:21:59,058 - __main__ - INFO - Бот остановлен
+2025-07-03 16:22:57,023 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-03 16:22:57,023 - apscheduler.scheduler - INFO - Added job "check_and_send_capsules" to job store "default"
+2025-07-03 16:22:57,023 - apscheduler.scheduler - INFO - Scheduler started
+2025-07-03 16:22:57,023 - __main__ - INFO - Бот запускается...
+2025-07-03 16:27:11,081 - TeleBot - ERROR - Infinity polling: polling exited
+2025-07-03 16:27:11,083 - TeleBot - ERROR - Break infinity polling
+2025-07-03 16:27:11,083 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-07-03 16:27:11,084 - __main__ - INFO - Бот остановлен
+2025-07-03 16:29:14,436 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-03 16:29:14,436 - apscheduler.scheduler - INFO - Added job "check_and_send_capsules" to job store "default"
+2025-07-03 16:29:14,436 - apscheduler.scheduler - INFO - Scheduler started
+2025-07-03 16:29:14,436 - __main__ - INFO - Бот запускается...
+2025-07-03 16:29:28,929 - TeleBot - ERROR - Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: MESSAGE_TOO_LONG
+2025-07-03 16:29:28,932 - TeleBot - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/bot.py", line 528, in process_help_categories
+    bot.edit_message_text(
+    ~~~~~~~~~~~~~~~~~~~~~^
+        chat_id=call.message.chat.id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        parse_mode="HTML"
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 4997, in edit_message_text
+    result = apihelper.edit_message_text(
+        self.token, text, chat_id=chat_id, message_id=message_id, inline_message_id=inline_message_id,
+        parse_mode=parse_mode, entities=entities, reply_markup=reply_markup, link_preview_options=link_preview_options,
+        business_connection_id=business_connection_id, timeout=timeout)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 1524, in edit_message_text
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 1235, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/util.py", line 93, in run
+    task(*args, **kwargs)
+    ~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 9759, in _run_middlewares_and_handler
+    result = handler['function'](message)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/bot.py", line 536, in process_help_categories
+    bot.answer_callback_query(call.id, f"Ошибка: {str(e)}")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 6081, in answer_callback_query
+    return apihelper.answer_callback_query(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.token, callback_query_id, text=text, show_alert=show_alert, url=url, cache_time=cache_time)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 1871, in answer_callback_query
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: MESSAGE_TOO_LONG
+
+2025-07-03 16:29:33,240 - TeleBot - ERROR - Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: MESSAGE_TOO_LONG
+2025-07-03 16:29:33,244 - TeleBot - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/bot.py", line 528, in process_help_categories
+    bot.edit_message_text(
+    ~~~~~~~~~~~~~~~~~~~~~^
+        chat_id=call.message.chat.id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        parse_mode="HTML"
+        ^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 4997, in edit_message_text
+    result = apihelper.edit_message_text(
+        self.token, text, chat_id=chat_id, message_id=message_id, inline_message_id=inline_message_id,
+        parse_mode=parse_mode, entities=entities, reply_markup=reply_markup, link_preview_options=link_preview_options,
+        business_connection_id=business_connection_id, timeout=timeout)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 1524, in edit_message_text
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 1235, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/util.py", line 93, in run
+    task(*args, **kwargs)
+    ~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 9759, in _run_middlewares_and_handler
+    result = handler['function'](message)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/bot.py", line 536, in process_help_categories
+    bot.answer_callback_query(call.id, f"Ошибка: {str(e)}")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 6081, in answer_callback_query
+    return apihelper.answer_callback_query(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.token, callback_query_id, text=text, show_alert=show_alert, url=url, cache_time=cache_time)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 1871, in answer_callback_query
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: MESSAGE_TOO_LONG
+
+2025-07-03 16:33:09,696 - TeleBot - ERROR - Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: MESSAGE_TOO_LONG
+2025-07-03 16:33:09,700 - TeleBot - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/bot.py", line 528, in process_help_categories
+    /anniversary - Годовщина свадьбы
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+            text = """
+            ^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 4997, in edit_message_text
+    result = apihelper.edit_message_text(
+        self.token, text, chat_id=chat_id, message_id=message_id, inline_message_id=inline_message_id,
+        parse_mode=parse_mode, entities=entities, reply_markup=reply_markup, link_preview_options=link_preview_options,
+        business_connection_id=business_connection_id, timeout=timeout)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 1524, in edit_message_text
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 1235, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/util.py", line 93, in run
+    task(*args, **kwargs)
+    ~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 9759, in _run_middlewares_and_handler
+    result = handler['function'](message)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/bot.py", line 536, in process_help_categories
+    /truth_or_dare - Игра "Правда или действие"
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 6081, in answer_callback_query
+    return apihelper.answer_callback_query(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.token, callback_query_id, text=text, show_alert=show_alert, url=url, cache_time=cache_time)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 1871, in answer_callback_query
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: MESSAGE_TOO_LONG
+
+2025-07-03 16:34:14,439 - apscheduler.executors.default - INFO - Running job "check_and_send_capsules (trigger: interval[0:05:00], next run at: 2025-07-03 16:34:14 +05)" (scheduled at 2025-07-03 16:34:14.436324+05:00)
+2025-07-03 16:34:14,448 - __main__ - ERROR - Ошибка выполнения запроса: no such column: chat_id
+Query: SELECT id, user_id, message, chat_id FROM timecapsules WHERE is_sent = 0 AND send_at <= datetime('now')
+Params: ()
+2025-07-03 16:34:14,449 - apscheduler.executors.default - INFO - Job "check_and_send_capsules (trigger: interval[0:05:00], next run at: 2025-07-03 16:39:14 +05)" executed successfully
+2025-07-03 16:35:48,725 - TeleBot - ERROR - Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: MESSAGE_TOO_LONG
+2025-07-03 16:35:48,729 - TeleBot - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/bot.py", line 528, in process_help_categories
+            reply_markup=keyboard,
+            ^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        # Очень короткое сообщение об ошибке
+        ^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 4997, in edit_message_text
+    result = apihelper.edit_message_text(
+        self.token, text, chat_id=chat_id, message_id=message_id, inline_message_id=inline_message_id,
+        parse_mode=parse_mode, entities=entities, reply_markup=reply_markup, link_preview_options=link_preview_options,
+        business_connection_id=business_connection_id, timeout=timeout)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 1524, in edit_message_text
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 1235, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/util.py", line 93, in run
+    task(*args, **kwargs)
+    ~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 9759, in _run_middlewares_and_handler
+    result = handler['function'](message)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/bot.py", line 536, in process_help_categories
+    logging.error(f"Ошибка обработки help: {e}")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/__init__.py", line 6081, in answer_callback_query
+    return apihelper.answer_callback_query(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.token, callback_query_id, text=text, show_alert=show_alert, url=url, cache_time=cache_time)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 1871, in answer_callback_query
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/Users/irinakapustina/Downloads/Бот на свадьбу/.venv/lib/python3.13/site-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: MESSAGE_TOO_LONG
+
+2025-07-03 16:35:58,022 - TeleBot - ERROR - Infinity polling: polling exited
+2025-07-03 16:35:58,023 - TeleBot - ERROR - Break infinity polling
+2025-07-03 16:35:58,024 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-07-03 16:35:58,024 - __main__ - INFO - Бот остановлен
+2025-07-03 16:37:46,379 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-03 16:37:46,379 - apscheduler.scheduler - INFO - Added job "check_and_send_capsules" to job store "default"
+2025-07-03 16:37:46,379 - apscheduler.scheduler - INFO - Scheduler started
+2025-07-03 16:37:46,379 - __main__ - INFO - Бот запускается...
+2025-07-03 16:38:04,921 - TeleBot - ERROR - Infinity polling: polling exited
+2025-07-03 16:38:04,923 - TeleBot - ERROR - Break infinity polling
+2025-07-03 16:38:04,923 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-07-03 16:38:04,924 - __main__ - INFO - Бот остановлен
+2025-07-03 16:39:55,861 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-03 16:39:55,861 - apscheduler.scheduler - INFO - Added job "check_and_send_capsules" to job store "default"
+2025-07-03 16:39:55,862 - apscheduler.scheduler - INFO - Scheduler started
+2025-07-03 16:39:55,862 - __main__ - INFO - Бот запускается...
+2025-07-03 16:44:24,090 - TeleBot - ERROR - Infinity polling: polling exited
+2025-07-03 16:44:24,091 - TeleBot - ERROR - Break infinity polling
+2025-07-03 16:44:24,091 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-07-03 16:44:24,092 - __main__ - INFO - Бот остановлен
+2025-07-04 11:51:17,958 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-04 11:51:17,958 - apscheduler.scheduler - INFO - Added job "check_and_send_capsules" to job store "default"
+2025-07-04 11:51:17,958 - apscheduler.scheduler - INFO - Scheduler started
+2025-07-04 11:51:17,959 - __main__ - INFO - Бот запускается...
+2025-07-04 11:51:24,536 - TeleBot - ERROR - Infinity polling: polling exited
+2025-07-04 11:51:24,537 - TeleBot - ERROR - Break infinity polling
+2025-07-04 11:51:24,537 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-07-04 11:51:24,538 - __main__ - INFO - Бот остановлен
