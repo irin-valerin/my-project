@@ -966,7 +966,7 @@ def process_capsule_days(message, user_data):
         conn = sqlite3.connect('wedding_bot.db')
         cursor = conn.cursor()
         cursor.execute("INSERT INTO timecapsules (user_id, message, send_at) VALUES (?, ?, ?)",
-                     (user_id, user_data['text'], send_date))
+              (user_id, user_data['text'], send_date.isoformat()))  # Преобразуем datetime в строку
         conn.commit()
         
         scheduler.add_job(
