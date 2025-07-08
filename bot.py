@@ -328,7 +328,7 @@ if IS_RENDER:
         return "Telegram Bot is running", 200
 
     def run_flask():
-        app.run(host='0.0.0.0', port=os.getenv('PORT', 10000))
+        app.run(host='0.0.0.0', port=int(os.getenv("PORT"))) 
 
 # Получаем токен
 TOKEN = os.getenv('TELEGRAM_TOKEN') or os.getenv('BOT_TOKEN')
