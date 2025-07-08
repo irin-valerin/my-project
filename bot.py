@@ -299,32 +299,60 @@ db_lock = Lock()
 user_states = {}
 state_lock = Lock()
 
+
+
 # ===== ИНИЦИАЛИЗАЦИЯ БОТА =====
 import os
-from dotenv import load_dotenv
+from flask import Flask, request
+from threading import Thread
 
-# Пробуем загрузить .env-файл (для локальной разработки)
-if os.path.exists('.env'):
-    load_dotenv()
-    print("✅ .env-файл загружен (локальный режим)")
-else:
-    print("ℹ️ Используем переменные окружения (режим Render)")
+# Создаем Flask-приложение для работы на Render
+app = Flask(__name__)
 
-# Получаем токен (пробуем разные варианты названий переменных)
-TOKEN = (
-    os.getenv('TELEGRAM_TOKEN')          # Основное название из вашего кода
-    or os.getenv('BOT_TOKEN')            # Альтернативное название
-    or os.environ.get('TELEGRAM_TOKEN')  # Прямой доступ к переменным окружения
-)
+# Проверяем, запущен ли код на Render
+IS_RENDER = os.getenv('RENDER')
 
+if IS_RENDER:
+    # Режим Render - используем webhook
+    @app.route('/webhook', methods=['POST'])
+    def webhook():
+        if request.headers.get('content-type') == 'application/json':
+            json_string = request.get_data().decode('utf-8')
+            update = telebot.types.Update.de_json(json_string)
+            bot.process_new_updates([update])
+            return "OK", 200
+        return "Bad request", 400
+
+    @app.route('/')
+    def home():
+        return "Telegram Bot is running", 200
+
+    def run_flask():
+        app.run(host='0.0.0.0', port=os.getenv('PORT', 10000))
+
+# Получаем токен
+TOKEN = os.getenv('TELEGRAM_TOKEN') or os.getenv('BOT_TOKEN')
 if not TOKEN:
-    raise ValueError("❌ Токен не найден! Проверьте:"
-                   "\n1. Файл .env (для локального запуска)"
-                   "\n2. Переменные окружения на Render (для деплоя)")
+    raise ValueError("Токен не найден в переменных окружения!")
 
 bot = telebot.TeleBot(TOKEN, threaded=True, num_threads=10)
-print(f"🟢 Бот инициализирован с токеном: {TOKEN[:5]}...")  # Логируем первые 5 символов
 
+if IS_RENDER:
+    # На Render запускаем Flask в отдельном потоке
+    flask_thread = Thread(target=run_flask)
+    flask_thread.start()
+    
+    # Устанавливаем webhook
+    bot.remove_webhook()
+    sleep(1)
+    bot.set_webhook(url=f"https://{os.getenv('RENDER_EXTERNAL_HOSTNAME')}/webhook")
+    logger.info("Webhook установлен для Render")
+else:
+    # Локальный режим - используем polling
+    logger.info("Запускаем в режиме polling")
+    bot.polling(none_stop=True, skip_pending=True)
+
+    
 
 
 
