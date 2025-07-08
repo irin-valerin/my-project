@@ -10,6 +10,7 @@ from telebot import types
 from apscheduler.schedulers.background import BackgroundScheduler
 import pytz
 import requests
+from time import sleep  # Добавляем импорт функции sleep
 
 # ===== НАСТРОЙКА ЛОГИРОВАНИЯ =====
 logging.basicConfig(
