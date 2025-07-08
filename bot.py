@@ -352,7 +352,7 @@ else:
     logger.info("Запускаем в режиме polling")
     bot.polling(none_stop=True, skip_pending=True)
 
-    
+
 
 
 
@@ -1005,10 +1005,33 @@ scheduler.start()
 # ===== ЗАПУСК БОТА С ОБРАБОТКОЙ ОШИБОК =====
 if __name__ == "__main__":
     logger.info("Бот запускается...")
+    
     try:
-        bot.infinity_polling(timeout=60, long_polling_timeout=30)
+        if IS_RENDER:
+            # Режим Render - используем вебхук
+            logger.info("Режим: Render (Webhook)")
+            
+            # Удаляем старый вебхук, если есть
+            bot.remove_webhook()
+            sleep(1)
+            
+            # Устанавливаем новый вебхук
+            webhook_url = f"https://{os.getenv('RENDER_EXTERNAL_HOSTNAME')}/webhook"
+            bot.set_webhook(url=webhook_url)
+            logger.info(f"Webhook установлен: {webhook_url}")
+            
+            # Запускаем Flask в основном потоке (так как на Render нужно слушать порт)
+            app.run(host='0.0.0.0', port=int(os.getenv('PORT', 10000)))
+        else:
+            # Локальный режим - используем polling
+            logger.info("Режим: Локальный (Polling)")
+            bot.infinity_polling(timeout=60, long_polling_timeout=30)
+            
     except Exception as e:
         logger.critical(f"Критическая ошибка: {e}")
+        # Попытка перезапуска через 5 секунд
+        sleep(5)
+        
     finally:
         scheduler.shutdown()
         logger.info("Бот остановлен")
