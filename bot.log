@@ -849,3 +849,10 @@ requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.telegram.org'
 2025-07-08 22:39:14,964 - TeleBot - ERROR - Break infinity polling
 2025-07-08 22:39:14,965 - apscheduler.scheduler - INFO - Scheduler has been shut down
 2025-07-08 22:39:14,965 - __main__ - INFO - Бот остановлен
+2025-07-08 23:20:03,937 - apscheduler.scheduler - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-07-08 23:20:03,937 - apscheduler.scheduler - INFO - Added job "check_and_send_capsules" to job store "default"
+2025-07-08 23:20:03,938 - apscheduler.scheduler - INFO - Scheduler started
+2025-07-08 23:20:03,938 - __main__ - INFO - Бот запускается...
+2025-07-08 23:20:03,938 - TeleBot - ERROR - Break infinity polling
+2025-07-08 23:20:03,938 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-07-08 23:20:03,938 - __main__ - INFO - Бот остановлен
