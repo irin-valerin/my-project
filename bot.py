@@ -303,14 +303,21 @@ state_lock = Lock()
 
 # ===== ИНИЦИАЛИЗАЦИЯ БОТА =====
 import os
-from flask import Flask, request
+from flask import Flask, request, jsonify  # Добавлен jsonify
 from threading import Thread
+from datetime import datetime  # Добавлен импорт
 
 # Создаем Flask-приложение для работы на Render
 app = Flask(__name__)
 
 # Проверяем, запущен ли код на Render
 IS_RENDER = os.getenv('RENDER')
+
+# Новый эндпоинт для пробуждения бота
+@app.route('/wakeup')
+def wakeup():
+    logger.info("Бот пробужден по запросу cron-job")
+    return jsonify({"status": "awake", "time": datetime.now().isoformat()}), 200
 
 if IS_RENDER:
     # Режим Render - используем webhook
@@ -328,7 +335,9 @@ if IS_RENDER:
         return "Telegram Bot is running", 200
 
     def run_flask():
-        app.run(host='0.0.0.0', port=int(os.getenv("PORT"))) 
+        port = int(os.getenv("PORT", 10000))
+        logger.info(f"Запуск Flask на порту {port}")
+        app.run(host='0.0.0.0', port=port)
 
 # Получаем токен
 TOKEN = os.getenv('TELEGRAM_TOKEN') or os.getenv('BOT_TOKEN')
