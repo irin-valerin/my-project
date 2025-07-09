@@ -11,6 +11,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import pytz
 import requests
 from time import sleep  # Добавляем импорт функции sleep
+# Автоматически выбираем путь в зависимости от окружения
+
+DB_PATH = '/data/wedding_bot.db' if os.getenv('RENDER') else 'wedding_bot.db'
+
 
 # ===== НАСТРОЙКА ЛОГИРОВАНИЯ =====
 logging.basicConfig(
@@ -369,7 +373,7 @@ else:
 def get_db_connection():
     """Потокобезопасное подключение к SQLite с таймаутом"""
     return sqlite3.connect(
-        'wedding_bot.db',
+        DB_PATH,
         timeout=DB_TIMEOUT,
         check_same_thread=False,
         isolation_level=None
