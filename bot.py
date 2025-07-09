@@ -1017,7 +1017,6 @@ scheduler.start()
 
 # ===== ЗАПУСК БОТА С ОБРАБОТКОЙ ОШИБОК =====
 if __name__ == "__main__":
-    init_db()
     logger.info("Бот запускается...")
     
     try:
