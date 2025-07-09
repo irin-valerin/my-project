@@ -376,66 +376,80 @@ def get_db_connection():
     )
 
 # ===== ОПТИМИЗИРОВАННАЯ ИНИЦИАЛИЗАЦИЯ БД =====
-    """Инициализация базы данных с индексами и настройками"""
+def init_db():
+    """Инициализация базы данных с оптимизированными настройками"""
+    conn = None
     try:
-        conn = sqlite3.connect('wedding_bot.db')
-        cursor = conn.cursor()
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Включение WAL режима для лучшей параллельной работы
-        cursor.execute("PRAGMA journal_mode=WAL")
-        cursor.execute("PRAGMA synchronous=NORMAL")
-        cursor.execute("PRAGMA cache_size=-10000")  # 10MB кэша
+        # Настройки SQLite
+        pragmas = {
+            "journal_mode": "WAL",
+            "synchronous": "NORMAL",
+            "cache_size": -10000,  # 10MB кэша
+            "foreign_keys": "ON"   # Включение внешних ключей
+        }
         
-        # Таблица поздравлений с индексом
-        cursor.execute('''
-        CREATE TABLE IF NOT EXISTS congratulations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            user_name TEXT NOT NULL,
-            message TEXT NOT NULL,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )''')
-        cursor.execute('CREATE INDEX IF NOT EXISTS congrats_user_idx ON congratulations(user_id)')
+        for key, value in pragmas.items():
+            try:
+                cursor.execute(f"PRAGMA {key}={value}")
+            except sqlite3.Error as e:
+                logger.warning(f"Не удалось установить PRAGMA {key}: {e}")
         
-        # Таблица настроений с индексом
-        cursor.execute('''
-        CREATE TABLE IF NOT EXISTS moods (
-            user_id INTEGER NOT NULL,
-            score INTEGER CHECK(score BETWEEN 1 AND 5),
-            note TEXT,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )''')
-        cursor.execute('CREATE INDEX IF NOT EXISTS moods_user_idx ON moods(user_id)')
+        # Таблицы с улучшенными индексами
+        tables = [
+            ('''CREATE TABLE IF NOT EXISTS congratulations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                user_name TEXT NOT NULL,
+                message TEXT NOT NULL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )''', [
+                'CREATE INDEX IF NOT EXISTS congrats_user_time_idx ON congratulations(user_id, timestamp)'
+            ]),
+            
+            ('''CREATE TABLE IF NOT EXISTS moods (
+                user_id INTEGER NOT NULL,
+                score INTEGER CHECK(score BETWEEN 1 AND 5),
+                note TEXT,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )''', [
+                'CREATE INDEX IF NOT EXISTS moods_user_time_idx ON moods(user_id, timestamp)'
+            ]),
+            
+            ('''CREATE TABLE IF NOT EXISTS timecapsules (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                message TEXT NOT NULL,
+                send_at DATETIME NOT NULL,
+                is_sent INTEGER DEFAULT 0,
+                chat_id INTEGER NOT NULL
+            )''', [
+                'CREATE INDEX IF NOT EXISTS capsules_user_sent_idx ON timecapsules(user_id, is_sent)',
+                'CREATE INDEX IF NOT EXISTS capsules_send_at_idx ON timecapsules(send_at)'
+            ]),
+            
+            ('''CREATE TABLE IF NOT EXISTS wishes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                wish TEXT NOT NULL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )''', [
+                'CREATE INDEX IF NOT EXISTS wishes_user_time_idx ON wishes(user_id, timestamp)'
+            ])
+        ]
         
-        # Таблица капсул времени с индексом
-        cursor.execute('''
-        CREATE TABLE IF NOT EXISTS timecapsules (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            message TEXT NOT NULL,
-            send_at DATETIME NOT NULL,
-            is_sent INTEGER DEFAULT 0,
-            chat_id INTEGER NOT NULL
-        )''')
-        cursor.execute('CREATE INDEX IF NOT EXISTS capsules_user_idx ON timecapsules(user_id)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS capsules_sent_idx ON timecapsules(is_sent)')
-        
-        # Таблица желаний с индексом
-        cursor.execute('''
-        CREATE TABLE IF NOT EXISTS wishes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            wish TEXT NOT NULL,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )''')
-        cursor.execute('CREATE INDEX IF NOT EXISTS wishes_user_idx ON wishes(user_id)')
+        for table_sql, indexes in tables:
+            cursor.execute(table_sql)
+            for index_sql in indexes:
+                cursor.execute(index_sql)
         
         conn.commit()
-        logger.info("База данных успешно инициализирована")
+        logger.info("База данных инициализирована с оптимизированными индексами")
+        
     except Exception as e:
-        logger.error(f"Ошибка инициализации БД: {e}")
+        logger.critical(f"Критическая ошибка инициализации БД: {e}")
         raise
     finally:
         if conn:
@@ -643,22 +657,72 @@ def wedding_anniversary(message):
 
 @bot.message_handler(commands=['congrats'])
 def show_congrats(message):
+    """Показывает последние поздравления с пагинацией и улучшенным форматированием"""
+    conn = None
     try:
-        conn = sqlite3.connect('wedding_bot.db')
+        # Используем единый метод подключения
+        conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('SELECT user_name, message, timestamp FROM congratulations ORDER BY timestamp DESC LIMIT 50')
+        
+        # Оптимизированный запрос с использованием индекса
+        cursor.execute('''
+            SELECT user_name, message, timestamp 
+            FROM congratulations 
+            ORDER BY timestamp DESC 
+            LIMIT 50
+        ''')
+        
         congrats = cursor.fetchall()
         
-        if congrats:
-            response = "💌 Последние поздравления:\n\n" + "\n".join(
-                [f"🏷️ {item[0]} ({item[2][:10]}):\n{item[1]}\n" for item in congrats])
-            bot.send_message(message.chat.id, response)
+        if not congrats:
+            bot.send_message(
+                message.chat.id,
+                "🎉 Пока нет поздравлений. Будьте первым!\n"
+                "Напишите /congratulate чтобы оставить свое пожелание.",
+                parse_mode="Markdown"
+            )
+            return
+        
+        # Форматируем красивое сообщение с эмодзи
+        response = [
+            "📜 *Последние поздравления:*\n",
+            *[
+                f"✨ *{name}* ({date[:10]})\n"
+                f"_{text}_\n"
+                for name, text, date in congrats
+            ]
+        ]
+        
+        # Разбиваем на части если сообщение слишком длинное
+        msg_text = "\n".join(response)
+        if len(msg_text) > 4000:
+            parts = [msg_text[i:i+4000] for i in range(0, len(msg_text), 4000)]
+            for part in parts:
+                bot.send_message(message.chat.id, part, parse_mode="Markdown")
         else:
-            bot.send_message(message.chat.id, "Пока нет поздравлений 😢")
+            bot.send_message(
+                message.chat.id,
+                msg_text,
+                parse_mode="Markdown"
+            )
+            
+    except sqlite3.Error as e:
+        logger.error(f"Ошибка БД в show_congrats: {e}")
+        bot.send_message(
+            message.chat.id,
+            "⚠️ Произошла ошибка при загрузке поздравлений. Попробуйте позже."
+        )
+        
     except Exception as e:
-        bot.send_message(message.chat.id, f"⚠️ Ошибка: {e}")
+        logger.error(f"Неожиданная ошибка в show_congrats: {e}")
+        bot.send_message(
+            message.chat.id,
+            "😢 Не удалось загрузить поздравления. Администратор уже уведомлен."
+        )
+        
     finally:
-        conn.close()
+        if conn:
+            conn.close()
 
 @bot.message_handler(commands=['mood'])
 def ask_mood(message):
@@ -882,44 +946,121 @@ def export_db(message):
     else:
         bot.reply_to(message, "🚫 Эта команда только для администраторов")
 
-# ===== ОБРАБОТЧИКИ КОМАНД С УЧЕТОМ МНОГОПОЛЬЗОВАТЕЛЬСКОЙ РАБОТЫ =====
+# ===== ОБНОВЛЕННЫЙ ОБРАБОТЧИК ПОЗДРАВЛЕНИЙ =====
+
 @bot.message_handler(commands=['congratulate'])
 def start_congratulation(message):
-    """Обработчик поздравлений с проверкой нагрузки"""
+    """Начало процесса добавления поздравления"""
+    conn = None
     try:
+        # Проверка администратора
         if message.from_user.id in ADMINS:
-            bot.reply_to(message, "Вы не можете поздравлять сами себя 😊")
+            bot.send_message(
+                message.chat.id,
+                "🚫 Администраторы не могут отправлять поздравления\n"
+                "Используйте /congrats для просмотра",
+                parse_mode="Markdown"
+            )
             return
-            
-        # Проверка количества активных пользователей
-        if len(user_states) > MAX_CONCURRENT_USERS * 0.8:
-            bot.reply_to(message, "Сервер перегружен, попробуйте позже")
+
+        # Проверка нагрузки
+        if len(user_states) >= MAX_CONCURRENT_USERS * 0.8:
+            bot.send_message(
+                message.chat.id,
+                "⚠️ Сейчас много желающих оставить поздравление\n"
+                "Попробуйте через 5-10 минут",
+                parse_mode="Markdown"
+            )
             return
-            
-        set_user_state(message.from_user.id, {'waiting_for_congratulation': True})
-        msg = bot.reply_to(message, "Напишите ваше поздравление:")
-        bot.register_next_step_handler(msg, process_congratulation)
+
+        # Устанавливаем состояние
+        set_user_state(message.from_user.id, {
+            'waiting_for_congratulation': True,
+            'start_time': datetime.now().isoformat()
+        })
+
+        # Отправляем инструкцию
+        bot.send_message(
+            message.chat.id,
+            "📝 *Напишите ваше поздравление:*\n\n"
+            "• Можно использовать эмодзи 😊\n"
+            "• Максимум 500 символов\n"
+            "• Отправьте одним сообщением",
+            parse_mode="Markdown",
+            reply_markup=types.ForceReply(selective=True)
+        )
+
     except Exception as e:
-        logger.error(f"Ошибка в start_congratulation: {e}")
-        bot.reply_to(message, "⚠️ Произошла ошибка, попробуйте позже")
+        logger.error(f"Ошибка start_congratulation: {str(e)}")
+        bot.send_message(
+            message.chat.id,
+            "😢 Произошла техническая ошибка. Попробуйте позже."
+        )
 
 def process_congratulation(message):
-    """Обработка текста поздравления"""
+    """Обработка и сохранение поздравления"""
+    conn = None
     try:
+        # Проверка состояния
         user_state = get_user_state(message.from_user.id)
         if not user_state or not user_state.get('waiting_for_congratulation'):
-            bot.reply_to(message, "Сессия устарела, начните заново")
+            bot.send_message(
+                message.chat.id,
+                "⏳ Время на отправку истекло. Начните заново командой /congratulate"
+            )
             return
-            
-        safe_db_execute(
+
+        # Валидация сообщения
+        if len(message.text) > 500:
+            bot.send_message(
+                message.chat.id,
+                "❌ Слишком длинное сообщение (макс. 500 символов)\n"
+                "Попробуйте снова: /congratulate"
+            )
+            return
+
+        # Сохранение в БД
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute(
             "INSERT INTO congratulations (user_id, user_name, message) VALUES (?, ?, ?)",
-            (message.from_user.id, message.from_user.first_name, message.text)
+            (message.from_user.id, 
+             message.from_user.first_name, 
+             message.text[:500])  # Обрезаем на случай если проверка не сработала
         )
-        bot.reply_to(message, "✅ Ваше поздравление сохранено!")
+        conn.commit()
+
+        # Подтверждение с форматированием
+        bot.send_message(
+            message.chat.id,
+            f"🎉 *Ваше поздравление сохранено!*\n\n"
+            f"_{message.text}_\n\n"
+            f"Спасибо за теплые слова! 💌\n"
+            f"Посмотреть все: /congrats",
+            parse_mode="Markdown"
+        )
+
+        # Сброс состояния
         set_user_state(message.from_user.id, None)
+
+    except sqlite3.Error as e:
+        logger.error(f"Ошибка SQLite при сохранении: {str(e)}")
+        bot.send_message(
+            message.chat.id,
+            "⚠️ Не удалось сохранить поздравление. Попробуйте позже."
+        )
+
     except Exception as e:
-        logger.error(f"Ошибка в process_congratulation: {e}")
-        bot.reply_to(message, "⚠️ Ошибка сохранения, попробуйте позже")
+        logger.error(f"Неожиданная ошибка: {str(e)}")
+        bot.send_message(
+            message.chat.id,
+            "😢 Произошла техническая ошибка. Администратор уже уведомлен."
+        )
+
+    finally:
+        if conn:
+            conn.close()
 
 
 # ===== ОПТИМИЗИРОВАННЫЙ ПЛАНИРОВЩИК КАПСУЛ ВРЕМЕНИ =====
@@ -1015,6 +1156,7 @@ scheduler.start()
 
 # ===== ЗАПУСК БОТА С ОБРАБОТКОЙ ОШИБОК =====
 if __name__ == "__main__":
+    init_db()
     logger.info("Бот запускается...")
     
     try:
