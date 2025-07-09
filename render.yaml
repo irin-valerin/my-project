@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: wedding-bot
+    env: python
+    plan: free  # или "starter" для платного тарифа
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    persistentStorageEnabled: true  # Ключевая настройка!
