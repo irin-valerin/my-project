@@ -378,6 +378,8 @@ def get_db_connection():
 # ===== ОПТИМИЗИРОВАННАЯ ИНИЦИАЛИЗАЦИЯ БД =====
     """Инициализация базы данных с индексами и настройками"""
     try:
+        conn = sqlite3.connect('wedding_bot.db')
+        cursor = conn.cursor()
         conn = get_db_connection()
         cursor = conn.cursor()
         
