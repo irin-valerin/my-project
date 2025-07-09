@@ -13,7 +13,7 @@ import requests
 from time import sleep  # Добавляем импорт функции sleep
 # Автоматически выбираем путь в зависимости от окружения
 
-DB_PATH = '/data/wedding_bot.db' if os.getenv('RENDER') else 'wedding_bot.db'
+DB_PATH = 'wedding_bot.db' if os.getenv('RENDER') else 'wedding_bot.db'
 
 
 # ===== НАСТРОЙКА ЛОГИРОВАНИЯ =====
